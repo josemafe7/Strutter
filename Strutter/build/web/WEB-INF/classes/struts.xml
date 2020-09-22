@@ -1,0 +1,474 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <!-- Configuration for the default package. -->
+    <package name="default" extends="struts-default">
+        <action name=""> 
+            <result type="chain"> 
+                <param name="actionName">first</param> 
+                <param name="namespace">/first</param>
+            </result> 
+        </action>
+    </package>
+    
+    <package name="first" namespace="/first" extends="struts-default">
+        <action name="first">
+            <result>/Vistas/login.jsp</result>
+        </action>
+    </package>
+    
+    <package name="login" namespace="/login" extends="struts-default"> 
+        <action name="login" class="actions.LoginAction">
+            <result name="success">/Vistas/index.jsp</result>
+            <result name="error">/Vistas/login.jsp</result>
+            <result name="input">/Vistas/login.jsp</result>
+        </action>
+       
+        <action name="logout" class="actions.LoginAction" method="logout">
+            <result name="success" type="chain">
+                <param name="actionName">first</param>
+                <param name="namespace">/first</param>
+            </result>
+            <result name="input" type="chain">
+                <param name="actionName">first</param>
+                <param name="namespace">/first</param>
+            </result>
+        </action>
+    </package>
+    
+    <package name="registro" namespace="/registro" extends="struts-default"> 
+        <action name="registro" class="actions.RegistroAction" method="altaCliente">
+            <result name="success">/Vistas/login.jsp</result>
+            <result name="error">/Vistas/registro.jsp</result>
+            <result name="input">/Vistas/registro.jsp</result>
+        </action>
+        
+        <action name="goRegistro" class="actions.RegistroAction" method="genders">
+            <result>/Vistas/registro.jsp</result>
+            <result name="input">/Vistas/registro.jsp</result>
+        </action>
+        
+        
+        
+    </package>
+    
+    <package name="index" namespace="/index" extends="struts-default"> 
+        
+        <action name="goIndex">
+            <result>/Vistas/index.jsp</result>
+        </action>
+        
+        
+    </package>
+    
+    <package name="ofertas" namespace="/ofertas" extends="struts-default"> 
+        
+        <action name="loadOfertas" class="actions.OfertasAction">
+            <result name="success">/Vistas/oferta/ofertas.jsp</result>
+            <result name="error" type="chain">
+                <param name="actionName">goIndex</param>
+                <param name="namespace">/index</param>
+            </result>
+            <result name="input">/Vistas/oferta/searchOfertas.jsp</result>
+        </action>
+        
+        <action name="loadBuscador" class="actions.OfertasAction">
+            <result name="success">/Vistas/oferta/searchOfertas.jsp</result>
+            <result name="error" type="chain">
+                <param name="actionName">goIndex</param>
+                <param name="namespace">/index</param>
+            </result>
+        </action>
+        
+        <action name="goAddOferta" class="actions.OfertasAction">
+            <result name="success">/Vistas/oferta/addOferta.jsp</result>
+        </action>
+        
+        <action name="addOferta" class="actions.OfertasAction" method="altaOferta">
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes">image/jpeg</param>
+                <param name="maximumSize">2000000</param>
+                <param name="allowedExtensions">jpg</param>
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack" />
+            <result name="success" type="chain">
+                <param name="actionName">loadOfertas</param>
+                <param name="namespace">/ofertas</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goAddOferta</param>
+                <param name="namespace">/ofertas</param>
+            </result>
+            <result name="input">/Vistas/oferta/addOferta.jsp</result>
+        </action>
+        
+        <action name="goModifyOferta" class="actions.OfertasAction" method="goModifyOferta">
+            <result name="success">/Vistas/oferta/modifyOferta.jsp</result>
+        </action>
+        
+        <action name="modifyOferta" class="actions.OfertasAction" method="modificarOferta">
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes">image/jpeg</param>
+                <param name="maximumSize">2000000</param>
+                <param name="allowedExtensions">jpg</param>
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack" />
+            <result name="success" type="chain">
+                <param name="actionName">loadOfertas</param>
+                <param name="namespace">/ofertas</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goModifyOferta</param>
+                <param name="namespace">/ofertas</param>
+            </result>
+            <result name="input">/Vistas/oferta/modifyOferta.jsp</result>
+        </action>
+        
+        <action name="borrarOferta" class="actions.OfertasAction" method="borrarOferta">
+            <result name="success" type="chain">
+                <param name="actionName">loadOfertas</param>
+                <param name="namespace">/ofertas</param>
+            </result>
+        </action>
+        
+        <action name="desactivarOferta" class="actions.OfertasAction" method="desactivarOferta">
+            <result name="success" type="chain">
+                <param name="actionName">loadOfertas</param>
+                <param name="namespace">/ofertas</param>
+            </result>
+        </action>
+        
+        <action name="desecharOferta" class="actions.OfertasAction" method="desecharOferta">
+            <result name="success" type="chain">
+                <param name="actionName">loadOfertas</param>
+                <param name="namespace">/ofertas</param>
+            </result>
+        </action>
+        
+        <action name="activarOferta" class="actions.OfertasAction" method="activarOferta">
+            <result name="success" type="chain">
+                <param name="actionName">loadOfertas</param>
+                <param name="namespace">/ofertas</param>
+            </result>
+        </action>
+        
+        <action name="goComprar" class="actions.OfertasAction" method="goComprar">
+            <result name="success" type="chain">
+                <param name="actionName">loadCompras</param>
+                <param name="namespace">/compras</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">loadOfertas</param>
+                <param name="namespace">/ofertas</param>
+            </result>
+        </action>
+        
+        
+    </package>
+    
+    <package name="clientes" namespace="/clientes" extends="struts-default"> 
+        
+        <action name="loadClientes" class="actions.ClientesAction">
+            <result name="success">/Vistas/cliente/clientes.jsp</result>
+            <result name="error" type="chain">
+                <param name="actionName">goIndex</param>
+                <param name="namespace">/index</param>
+            </result>
+        </action>
+        
+        <action name="goAddCliente" class="actions.ClientesAction">
+            <result name="success">/Vistas/cliente/addCliente.jsp</result>
+        </action>
+        
+        <action name="addCliente" class="actions.ClientesAction" method="altaCliente">
+            <result name="success" type="chain">
+                <param name="actionName">loadClientes</param>
+                <param name="namespace">/clientes</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goAddCliente</param>
+                <param name="namespace">/clientes</param>
+            </result>
+            <result name="input">/Vistas/cliente/addCliente.jsp</result>
+        </action>
+        
+        <action name="goModifyCliente" class="actions.ClientesAction" method="goModifyCliente">
+            <result name="success">/Vistas/cliente/modifyCliente.jsp</result>
+        </action>
+        
+        <action name="modifyCliente" class="actions.ClientesAction" method="modificarCliente">
+            <result name="success" type="chain">
+                <param name="actionName">loadClientes</param>
+                <param name="namespace">/clientes</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goModifyCliente</param>
+                <param name="namespace">/clientes</param>
+            </result>
+            <result name="input">/Vistas/cliente/modifyCliente.jsp</result>
+        </action>
+        
+        <action name="borrarCliente" class="actions.ClientesAction" method="borrarCliente">
+            <result name="success" type="chain">
+                <param name="actionName">loadClientes</param>
+                <param name="namespace">/clientes</param>
+            </result>
+        </action>
+        
+        
+    </package>
+    
+    <package name="empleados" namespace="/empleados" extends="struts-default"> 
+        
+        <action name="loadEmpleados" class="actions.EmpleadosAction">
+            <result name="success">/Vistas/empleado/empleados.jsp</result>
+            <result name="error" type="chain">
+                <param name="actionName">goIndex</param>
+                <param name="namespace">/index</param>
+            </result>
+        </action>
+        
+        <action name="goAddEmpleado" class="actions.EmpleadosAction">
+            <result name="success">/Vistas/empleado/addEmpleado.jsp</result>
+        </action>
+        
+        <action name="addEmpleado" class="actions.EmpleadosAction" method="altaEmpleado">
+            <result name="success" type="chain">
+                <param name="actionName">loadEmpleados</param>
+                <param name="namespace">/empleados</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goAddEmpleado</param>
+                <param name="namespace">/empleados</param>
+            </result>
+            <result name="input">/Vistas/empleado/addEmpleado.jsp</result>
+        </action>
+        
+        
+        <action name="goModifyEmpleado" class="actions.EmpleadosAction" method="goModifyEmpleado">
+            <result name="success">/Vistas/empleado/modifyEmpleado.jsp</result>
+        </action>
+        
+        <action name="modifyEmpleado" class="actions.EmpleadosAction" method="modificarEmpleado">
+            <result name="success" type="chain">
+                <param name="actionName">loadEmpleados</param>
+                <param name="namespace">/empleados</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goModifyEmpleado</param>
+                <param name="namespace">/empleados</param>
+            </result>
+            <result name="input">/Vistas/empleado/modifyEmpleado.jsp</result>
+        </action>
+        
+        <action name="borrarEmpleado" class="actions.EmpleadosAction" method="borrarEmpleado">
+            <result name="success" type="chain">
+                <param name="actionName">loadEmpleados</param>
+                <param name="namespace">/empleados</param>
+            </result>
+        </action>
+        
+        
+    </package>
+    
+    <package name="empresas" namespace="/empresas" extends="struts-default"> 
+        
+        <action name="loadEmpresas" class="actions.EmpresasAction">
+            <result name="success">/Vistas/empresa/empresas.jsp</result>
+            <result name="error" type="chain">
+                <param name="actionName">goIndex</param>
+                <param name="namespace">/index</param>
+            </result>
+        </action>
+        
+        <action name="goAddEmpresa" class="actions.EmpresasAction">
+            <result name="success">/Vistas/empresa/addEmpresa.jsp</result>
+        </action>
+        
+        <action name="addEmpresa" class="actions.EmpresasAction" method="altaEmpresa">
+            <result name="success" type="chain">
+                <param name="actionName">loadEmpresas</param>
+                <param name="namespace">/empresas</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goAddEmpresa</param>
+                <param name="namespace">/empresas</param>
+            </result>
+            <result name="input">/Vistas/empresa/addEmpresa.jsp</result>
+        </action>
+        
+        
+        <action name="goModifyEmpresa" class="actions.EmpresasAction" method="goModifyEmpresa">
+            <result name="success">/Vistas/empresa/modifyEmpresa.jsp</result>
+        </action>
+        
+        <action name="modifyEmpresa" class="actions.EmpresasAction" method="modificarEmpresa">
+            <result name="success" type="chain">
+                <param name="actionName">loadEmpresas</param>
+                <param name="namespace">/empresas</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goModifyEmpresa</param>
+                <param name="namespace">/empresas</param>
+            </result>
+            <result name="input">/Vistas/empresa/modifyEmpresa.jsp</result>
+        </action>
+        
+        <action name="borrarEmpresa" class="actions.EmpresasAction" method="borrarEmpresa">
+            <result name="success" type="chain">
+                <param name="actionName">loadEmpresas</param>
+                <param name="namespace">/empresas</param>
+            </result>
+        </action>
+        
+        
+    </package>
+    
+    <package name="categorias" namespace="/categorias" extends="struts-default"> 
+        
+        <action name="loadCategorias" class="actions.CategoriasAction">
+            <result name="success">/Vistas/categoria/categorias.jsp</result>
+            <result name="error" type="chain">
+                <param name="actionName">goIndex</param>
+                <param name="namespace">/index</param>
+            </result>
+        </action>
+        
+        <action name="goAddCategoria" class="actions.CategoriasAction">
+            <result name="success">/Vistas/categoria/addCategoria.jsp</result>
+        </action>
+        
+        <action name="addCategoria" class="actions.CategoriasAction" method="altaCategoria">
+            <result name="success" type="chain">
+                <param name="actionName">loadCategorias</param>
+                <param name="namespace">/categorias</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goAddCategoria</param>
+                <param name="namespace">/categorias</param>
+            </result>
+            <result name="input">/Vistas/categoria/addCategoria.jsp</result>
+        </action>
+        
+        
+        <action name="goModifyCategoria" class="actions.CategoriasAction" method="goModifyCategoria">
+            <result name="success">/Vistas/categoria/modifyCategoria.jsp</result>
+        </action>
+        
+        <action name="modifyCategoria" class="actions.CategoriasAction" method="modificarCategoria">
+            <result name="success" type="chain">
+                <param name="actionName">loadCategorias</param>
+                <param name="namespace">/categorias</param>               
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goModifyCategoria</param>
+                <param name="namespace">/categorias</param>
+            </result>
+            <result name="input">/Vistas/categoria/modifyCategoria.jsp</result>
+        </action>
+        
+        <action name="borrarCategoria" class="actions.CategoriasAction" method="borrarCategoria">
+            <result name="success" type="chain">
+                <param name="actionName">loadCategorias</param>
+                <param name="namespace">/categorias</param>
+            </result>
+        </action>
+        
+        
+    </package>
+    
+    <package name="compras" namespace="/compras" extends="struts-default"> 
+        
+        <action name="loadCompras" class="actions.ComprasAction">
+            <result name="success">/Vistas/compra/compras.jsp</result>
+            <result name="error" type="chain">
+                <param name="actionName">goIndex</param>
+                <param name="namespace">/index</param>
+            </result>
+        </action>
+        
+        <action name="goAddCompra" class="actions.ComprasAction">
+            <result name="success">/Vistas/compra/addCompra.jsp</result>
+        </action>
+        
+        <action name="addCompra" class="actions.ComprasAction" method="altaCompra">
+            <result name="success" type="chain">
+                <param name="actionName">loadCompras</param>
+                <param name="namespace">/compras</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goAddCompra</param>
+                <param name="namespace">/compras</param>
+            </result>
+        </action>
+        
+        
+        <action name="goModifyCompra" class="actions.ComprasAction" method="goModifyCompra">
+            <result name="success">/Vistas/compra/modifyCompra.jsp</result>
+        </action>
+        
+        <action name="modifyCompra" class="actions.ComprasAction" method="modificarCompra">
+            <result name="success" type="chain">
+                <param name="actionName">loadCompras</param>
+                <param name="namespace">/compras</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">goModifyCompra</param>
+                <param name="namespace">/compras</param>
+            </result>
+        </action>
+        
+        <action name="borrarCompra" class="actions.ComprasAction" method="borrarCompra">
+            <result name="success" type="chain">
+                <param name="actionName">loadCompras</param>
+                <param name="namespace">/compras</param>
+            </result>
+        </action>
+        
+        
+    </package>
+    
+    <package name="departamentos" namespace="/departamentos" extends="struts-default"> 
+        
+        <action name="loadDepartamentos" class="actions.DepartamentosAction">
+            <result name="success">/Vistas/departamento/departamentos.jsp</result>
+            <result name="error" type="chain">
+                <param name="actionName">goIndex</param>
+                <param name="namespace">/index</param>
+            </result>
+        </action>
+        
+        
+    </package>
+    
+    <package name="miperfil" namespace="/miperfil" extends="struts-default"> 
+        
+        <action name="loadMiPerfil" class="actions.MiPerfilAction">
+            <result name="success">/Vistas/miperfil/miperfil.jsp</result>
+            <result name="error" type="chain">
+                <param name="actionName">goIndex</param>
+                <param name="namespace">/index</param>
+            </result>
+        </action>
+        
+        <action name="modifyPerfil" class="actions.MiPerfilAction" method="modificarPerfil">
+            <result name="success" type="chain">
+                <param name="actionName">logout</param>
+                <param name="namespace">/login</param>
+            </result>
+            <result name="error" type="chain">
+                <param name="actionName">loadMiPerfil</param>
+                <param name="namespace">/miperfil</param>
+            </result>
+            <result name="input">/Vistas/miperfil/miperfil.jsp</result>
+        </action>
+        
+        
+        
+    </package>
+    
+
+</struts>
+
